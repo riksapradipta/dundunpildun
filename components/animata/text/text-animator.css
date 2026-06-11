@@ -1,0 +1,39 @@
+.text-animation-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-animation-title {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.text-animation-unit {
+  display: inline-block;
+  white-space: pre;
+}
+
+.text-animation-fallback {
+  opacity: 1;
+}
+
+.text-animation-kinetic-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  white-space: nowrap;
+}
+
+.text-animation-kinetic-word {
+  position: absolute;
+  display: inline-block;
+  white-space: pre;
+}
+
+.text-animation-kinetic-stack {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
