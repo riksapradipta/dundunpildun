@@ -51,9 +51,11 @@ export default function DrawPage() {
   const [stoppedCount, setStoppedCount] = useState(0);
   const [celebrate, setCelebrate] = useState(false);
   const [started, setStarted] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [done, setDone] = useState(false);
   const spinRef = useRef(null);
   const celebrateRef = useRef(null);
+  const audioRef = useRef(null);
   const stoppedRef = useRef(new Set());
   const advanceRef = useRef(null);
 
@@ -123,6 +125,26 @@ export default function DrawPage() {
 
   const handleStart = () => {
     if (!session) return;
+    // play theme music
+    try {
+      if (!audioRef.current) {
+          const audio = new Audio(
+            encodeURI('/GJLS - DUN DUN PILDUN (Remix Cover 2026).mp3')
+          );
+          audio.loop = true;
+          audio.muted = muted;
+          audio.volume = 0.2; // start at 20%
+          audioRef.current = audio;
+        }
+        audioRef.current.currentTime = 0;
+        // when starting the draw, unmute audio
+        audioRef.current.muted = false;
+        setMuted(false);
+        audioRef.current.volume = 0.2;
+        audioRef.current.play().catch(() => {});
+    } catch (e) {
+      /* ignore play errors */
+    }
     const allBatches = runDraw(session.friends, session.teams);
     setBatches(allBatches);
     setCurrentBatch(0);
@@ -176,6 +198,29 @@ export default function DrawPage() {
     return () => clearTimeout(timeout);
   }, [done, session, batches, router]);
 
+  useEffect(() => {
+    // stop audio when done
+    if (done && audioRef.current) {
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } catch (e) {}
+    }
+    return () => {};
+  }, [done]);
+
+  const toggleMute = () => {
+    setMuted((m) => {
+      const next = !m;
+      if (audioRef.current) {
+        audioRef.current.muted = next;
+        // ensure volume remains at 10% when unmuted
+        if (!next) audioRef.current.volume = 0.2;
+      }
+      return next;
+    });
+  };
+
   if (!session) return null;
 
   const batch = currentBatch !== null && currentBatch < batches.length
@@ -226,6 +271,20 @@ export default function DrawPage() {
           {pickedSoFarCount}/{totalTeams}
         </span>
       </div>
+
+      {/* Mute button visible while draw not finished */}
+      {!done && (
+        <div className="mb-3 sm:mb-6 flex justify-end">
+          <button
+            onClick={toggleMute}
+            aria-pressed={muted}
+            className="rounded-full bg-orange-100 px-3 py-2 text-sm shadow-sm hover:bg-orange-200"
+            title={muted ? 'Unmute' : 'Mute'}
+          >
+            {muted ? '🔇' : '🔊'}
+          </button>
+        </div>
+      )}
 
       <div className="flex items-center justify-center gap-1.5 sm:gap-3 mb-4 sm:mb-8 flex-wrap">
         {session.friends.map((f, i) => {
@@ -343,12 +402,22 @@ export default function DrawPage() {
       </div>
 
       {!started && (
-        <button
-          onClick={handleStart}
-          className="w-full rounded-2xl bg-green-600 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition hover:bg-green-700 active:scale-95 touch-manipulation"
-        >
-          Mulai Undian ⚽
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={handleStart}
+            className="flex-1 rounded-2xl bg-green-600 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition hover:bg-green-700 active:scale-95 touch-manipulation"
+          >
+            Mulai Undian ⚽
+          </button>
+          <button
+            onClick={toggleMute}
+            aria-pressed={muted}
+            className="rounded-2xl bg-orange-100 px-3 py-3 text-sm shadow-sm hover:bg-orange-200"
+            title={muted ? 'Unmute' : 'Mute'}
+          >
+            {muted ? '🔇' : '🔊'}
+          </button>
+        </div>
       )}
 
       {started && !done && (

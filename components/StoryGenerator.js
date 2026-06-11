@@ -181,6 +181,15 @@ export default function StoryGenerator({ friend, color, teams }) {
       ctx.font = `bold 40px ${font}`;
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
+      // darker orange outline
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = "#ffee00"; // orange-700
+      ctx.shadowColor = hexToRgba("#b45309", 0.35);
+      ctx.shadowBlur = 8;
+      ctx.strokeText("Scan", textX, textCenterY - 30);
+      ctx.strokeText("untuk bikin juga", textX, textCenterY + 30);
+      // fill on top
+      ctx.shadowBlur = 0;
       ctx.fillText("Scan", textX, textCenterY - 30);
       ctx.fillText("untuk bikin juga", textX, textCenterY + 30);
 
