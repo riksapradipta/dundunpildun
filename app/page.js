@@ -1,65 +1,45 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import Marquee from "@/components/animata/container/marquee";
+import KineticTopBuild from "@/components/animata/text/kinetic-top-build";
+import { WC2026_TEAMS } from "@/lib/teams";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 opacity-15 flex flex-col justify-between">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Marquee key={i} repeat={8} reverse={i % 2 === 0} className="[--duration:60s]" applyMask>
+            {WC2026_TEAMS.map((team) => (
+              <span
+                key={team.slug}
+                className="text-4xl sm:text-5xl leading-none"
+              >
+                {team.flag}
+              </span>
+            ))}
+          </Marquee>
+        ))}
+      </div>
+      <div className="flex flex-col items-center gap-6 sm:gap-8 text-center max-w-md relative z-10">
+        <div className="text-5xl sm:text-7xl">🏆</div>
+        <h1 className="text-3xl sm:text-5xl font-black tracking-tight min-h-[8rem] sm:min-h-[10rem] flex items-center justify-center">
+          <KineticTopBuild
+            phrases={[["dun", "dun", "pildun"]]}
+            className="!aspect-auto !overflow-visible"
+          />
+        </h1>
+        <p className="text-sm sm:text-lg text-gray-500 leading-relaxed px-3 py-1.5 rounded-lg backdrop-blur-sm bg-white/40">
+          spirit menggembira piala dunia, menggelora kakinya ada dua, tangannya ada dua, sportifitasmu kau jaga brader
+        </p>
+        <Link
+          href="/setup"
+          className="inline-flex items-center gap-2 rounded-2xl bg-green-600 px-8 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition-all hover:bg-green-700 active:scale-95 touch-manipulation"
+        >
+          Buat Drawing Pildun 2026 🌍
+        </Link>
+      </div>
+    </main>
   );
 }
