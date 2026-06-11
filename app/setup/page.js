@@ -4,7 +4,6 @@ import { useState } from "react";
 import { WC2026_TEAMS } from "@/lib/teams";
 import { encodeSession } from "@/lib/draw";
 import { getColor } from "@/lib/colors";
-import { useRouter } from "next/navigation";
 
 export default function SetupPage() {
   const [friends, setFriends] = useState([]);
@@ -13,7 +12,6 @@ export default function SetupPage() {
     new Set(WC2026_TEAMS.map((t) => t.slug))
   );
 
-  const router = useRouter();
   const addFriend = (raw) => {
     const names = [...new Set(
       (raw || input)
@@ -54,7 +52,9 @@ export default function SetupPage() {
       teams: Array.from(selectedTeams),
     };
 
-    router.push(`/draw#${encodeSession(session)}`);
+    window.location.href =
+      `${process.env.NODE_ENV === "production" ? "/dundunpildun" : ""}` +
+      `/draw#${encodeSession(session)}`;
   };
 
   const canStart = friends.length >= 2 && selectedTeams.size >= friends.length;
