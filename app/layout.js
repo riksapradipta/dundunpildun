@@ -10,6 +10,9 @@ const inter = Inter({
 export const metadata = {
   title: "Dundunpildun",
   description: "Random draw Piala Dunia 2026 — bagi tim ke teman-temanmu!",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
