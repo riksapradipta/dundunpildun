@@ -183,8 +183,8 @@ export default function StoryGenerator({ friend, color, teams }) {
       ctx.textBaseline = "middle";
       // darker orange outline
       ctx.lineWidth = 6;
-      ctx.strokeStyle = "#ffee00"; // orange-700
-      ctx.shadowColor = hexToRgba("#b45309", 0.35);
+      ctx.strokeStyle = "#252525"; // orange-700
+      ctx.shadowColor = hexToRgba("#ffb14a", 0.35);
       ctx.shadowBlur = 8;
       ctx.strokeText("Scan", textX, textCenterY - 30);
       ctx.strokeText("untuk bikin juga", textX, textCenterY + 30);
