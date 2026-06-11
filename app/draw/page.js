@@ -168,7 +168,9 @@ export default function DrawPage() {
 
     const hash = encodeSession(completedSession);
     const timeout = setTimeout(() => {
-      window.location.href = `/results#${hash}`;
+          window.location.href =
+      `${process.env.NODE_ENV === "production" ? "/dundunpildun" : ""}` +
+      `/results#${hash}`;
     }, 800);
 
     return () => clearTimeout(timeout);
