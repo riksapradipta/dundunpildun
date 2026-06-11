@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  turbopack: {
-    root: process.cwd(),
+  output: 'export', // Outputs a static './out' folder during build
+  basePath: '/dundunpildun', // Replace with your exact repository name
+  images: {
+    unoptimized: true, // Disables the default image optimization server
   },
 };
 
