@@ -53,6 +53,7 @@ export default function DrawPage() {
   const [started, setStarted] = useState(false);
   const [muted, setMuted] = useState(true);
   const [done, setDone] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const spinRef = useRef(null);
   const celebrateRef = useRef(null);
   const audioRef = useRef(null);
@@ -125,23 +126,15 @@ export default function DrawPage() {
 
   const handleStart = () => {
     if (!session) return;
-    // play theme music
+    // play theme music via <audio>
     try {
-      if (!audioRef.current) {
-          const audio = new Audio(
-            encodeURI('/GJLS - DUN DUN PILDUN (Remix Cover 2026).mp3')
-          );
-          audio.loop = true;
-          audio.muted = muted;
-          audio.volume = 0.2; // start at 20%
-          audioRef.current = audio;
-        }
+      if (audioRef.current) {
         audioRef.current.currentTime = 0;
-        // when starting the draw, unmute audio
         audioRef.current.muted = false;
-        setMuted(false);
         audioRef.current.volume = 0.2;
         audioRef.current.play().catch(() => {});
+      }
+      setMuted(false);
     } catch (e) {
       /* ignore play errors */
     }
@@ -198,8 +191,34 @@ export default function DrawPage() {
     return () => clearTimeout(timeout);
   }, [done, session, batches, router]);
 
+  const toggleMute = () => {
+    setMuted((m) => {
+      const next = !m;
+      if (audioRef.current) audioRef.current.muted = next;
+      return next;
+    });
+  };
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
+    }
+  };
+
+  const setVolume = (v) => {
+    if (audioRef.current) {
+      audioRef.current.volume = v;
+      if (v === 0) audioRef.current.muted = true;
+      else audioRef.current.muted = muted;
+    }
+  };
+
   useEffect(() => {
-    // stop audio when done
     if (done && audioRef.current) {
       try {
         audioRef.current.pause();
@@ -208,18 +227,6 @@ export default function DrawPage() {
     }
     return () => {};
   }, [done]);
-
-  const toggleMute = () => {
-    setMuted((m) => {
-      const next = !m;
-      if (audioRef.current) {
-        audioRef.current.muted = next;
-        // ensure volume remains at 10% when unmuted
-        if (!next) audioRef.current.volume = 0.2;
-      }
-      return next;
-    });
-  };
 
   if (!session) return null;
 
@@ -264,6 +271,8 @@ export default function DrawPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-3 sm:px-4 py-4 sm:py-6">
       {celebrate && <Confetti color={currentColor?.dot} />}
+
+      {/* audio element (hidden) + visible controls (moved below "Giliran") */}
 
       <div className="flex items-center justify-between mb-3 sm:mb-6">
         <h1 className="text-base sm:text-xl font-bold">Undian Piala Dunia 2026</h1>
@@ -425,6 +434,45 @@ export default function DrawPage() {
           Giliran: <span className="font-semibold">{currentFriend}</span>
         </p>
       )}
+
+      {/* audio element (hidden) + visible controls placed under Giliran */}
+      <audio
+        ref={audioRef}
+        src={encodeURI('/GJLS - DUN DUN PILDUN (Remix Cover 2026).mp3')}
+        preload="auto"
+        loop
+        style={{ display: 'none' }}
+        muted={muted}
+      />
+      <div className="flex items-center gap-3 mb-3 justify-center">
+        <button
+          onClick={togglePlay}
+          className="rounded-full bg-gray-100 p-2 shadow-sm hover:bg-gray-200"
+          title={isPlaying ? 'Pause' : 'Play'}
+        >
+          {isPlaying ? '⏸️' : '▶️'}
+        </button>
+        <button
+          onClick={toggleMute}
+          aria-pressed={muted}
+          className="rounded-full bg-orange-100 px-3 py-2 text-sm shadow-sm hover:bg-orange-200"
+          title={muted ? 'Unmute' : 'Mute'}
+        >
+          {muted ? '🔇' : '🔊'}
+        </button>
+        <div className="flex items-center gap-2 ml-2">
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            defaultValue={0.2}
+            onChange={(e) => setVolume(parseFloat(e.target.value))}
+            className="w-40"
+            aria-label="volume"
+          />
+        </div>
+      </div>
 
       <div className="mt-4 sm:mt-8 mb-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
         {Object.entries(

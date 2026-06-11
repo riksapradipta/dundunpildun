@@ -161,9 +161,10 @@ export default function StoryGenerator({ friend, color, teams }) {
       }
 
       // QR code section — bottom right, below grid
+      // Ensure QR stays fixed to bottom-right regardless of grid size
       const gridEndY = gridStartY + rows.length * cardH + Math.max(0, rows.length - 1) * gapY;
-      const qrY = Math.min(gridEndY + qrGap, H - qrTotal - 40);
       const qrX = W - qrTotal - qrMargin;
+      const qrY = H - qrTotal - qrMargin; // fixed bottom-right
 
       ctx.save();
       roundRect(ctx, qrX, qrY, qrTotal, qrTotal, 14);
@@ -183,7 +184,6 @@ export default function StoryGenerator({ friend, color, teams }) {
       ctx.textBaseline = "middle";
       // darker orange outline
       ctx.lineWidth = 6;
-      ctx.strokeStyle = "#252525"; // orange-700
       ctx.shadowColor = hexToRgba("#ffb14a", 0.35);
       ctx.shadowBlur = 8;
       ctx.strokeText("Scan", textX, textCenterY - 30);
