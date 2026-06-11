@@ -37,7 +37,7 @@ export default function StoryGenerator({ friend, color, teams }) {
       const W = 1080;
       const H = 1920;
 
-      const qrDataUrl = await QRCode.toDataURL("https://dundunpildun.github.io", {
+      const qrDataUrl = await QRCode.toDataURL("https://riksapradipta.github.io/dundunpildun", {
         width: 320,
         margin: 2,
         color: { dark: "#111827", light: "#ffffff" },
