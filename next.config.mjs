@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
-  output: 'export', // Outputs a static './out' folder during build
-  basePath: '/dundunpildun', // Replace with your exact repository name
+  output: 'export',
+  basePath: isProd ? '/dundunpildun' : '',
+  assetPrefix: isProd ? '/dundunpildun/' : '',
   images: {
-    unoptimized: true, // Disables the default image optimization server
+    unoptimized: true,
   },
 };
 
