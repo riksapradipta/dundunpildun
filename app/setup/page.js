@@ -8,8 +8,9 @@ import { getColor } from "@/lib/colors";
 export default function SetupPage() {
   const [friends, setFriends] = useState([]);
   const [input, setInput] = useState("");
+  const DEFAULT_EXCLUDED = new Set(["perguruan-toho", "nankatsu-fc"]);
   const [selectedTeams, setSelectedTeams] = useState(
-    new Set(WC2026_TEAMS.map((t) => t.slug))
+    new Set(WC2026_TEAMS.filter((t) => !DEFAULT_EXCLUDED.has(t.slug)).map((t) => t.slug))
   );
 
   const addFriend = (raw) => {
@@ -144,7 +145,7 @@ export default function SetupPage() {
                   : "border-gray-200 bg-white text-gray-400 hover:border-gray-300"
                   }`}
               >
-                <span className="text-xl sm:text-2xl leading-none">{team.flag}</span>
+                {team.flagImg ? <img src={team.flagImg} className="inline-block w-6 h-6 sm:w-7 sm:h-7 align-middle" /> : <span className="text-xl sm:text-2xl leading-none">{team.flag}</span>}
                 <span className="truncate font-medium leading-tight">{team.name}</span>
               </button>
             );
