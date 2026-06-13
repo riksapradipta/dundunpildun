@@ -50,6 +50,21 @@ export default function StoryGenerator({ friend, color, teams }) {
         img.src = qrDataUrl;
       });
 
+      // Preload team images for teams with flagImg
+      const imgCache = {};
+      for (const slug of teams) {
+        const team = TEAM_MAP[slug];
+        if (team?.flagImg) {
+          const img = await new Promise((res, rej) => {
+            const i = new Image();
+            i.onload = () => res(i);
+            i.onerror = rej;
+            i.src = team.flagImg;
+          });
+          imgCache[slug] = img;
+        }
+      }
+
       await document.fonts.ready;
 
       const canvas = document.createElement("canvas");
@@ -147,10 +162,16 @@ export default function StoryGenerator({ friend, color, teams }) {
           const team = TEAM_MAP[slug];
           const cx = startX + ci * (cardW + gapX);
 
-          ctx.font = `${flagSize}px ${font}`;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(team.flag, cx + cardW / 2, currentY + flagY);
+          if (imgCache[slug]) {
+            const img = imgCache[slug];
+            const s = flagSize;
+            ctx.drawImage(img, cx + cardW / 2 - s / 2, currentY + flagY - s / 2, s, s);
+          } else {
+            ctx.font = `${flagSize}px ${font}`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(team.flag, cx + cardW / 2, currentY + flagY);
+          }
 
           ctx.fillStyle = "#e2e8f0";
           ctx.font = `bold ${nameSize}px ${font}`;
