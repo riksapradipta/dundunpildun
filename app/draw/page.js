@@ -199,16 +199,14 @@ export default function DrawPage() {
   }
 
   const totalTeams = session.teams.length;
-  const pickedSoFarCount = batches
-    .slice(0, completedBatches)
-    .flatMap((b) => b.teams).length;
+  const pickedSoFarCount = Object.keys(teamToColor).length;
 
   const friendStats = {};
   session.friends.forEach((f) => {
     const fb = batches.filter((b) => b.friend === f);
     const total = fb.reduce((s, b) => s + b.teams.length, 0);
-    const done = fb
-      .slice(0, Math.max(0, Math.min(completedBatches, batches.length)))
+    const done = batches
+      .slice(0, completedBatches)
       .filter((b) => b.friend === f)
       .reduce((s, b) => s + b.teams.length, 0);
     friendStats[f] = { total, done };
