@@ -60,8 +60,10 @@ export default function SetupPage() {
 
   const canStart = friends.length >= 2 && selectedTeams.size >= friends.length;
 
-  const teamsPerPerson = Math.floor(selectedTeams.size / Math.max(friends.length, 1));
-  const remainder = selectedTeams.size % Math.max(friends.length, 1);
+  const BATCH = 4;
+  const targetPerPerson = Math.max(BATCH, Math.ceil(selectedTeams.size / (BATCH * friends.length)) * BATCH);
+  const totalNeeded = targetPerPerson * friends.length;
+  const recycled = Math.max(0, totalNeeded - selectedTeams.size);
 
   return (
     <main className="mx-auto max-w-3xl px-3 sm:px-4 py-6 sm:py-8">
@@ -112,8 +114,8 @@ export default function SetupPage() {
         )}
         {friends.length >= 2 && (
           <p className="mt-2 text-xs text-gray-400">
-            Setiap peserta dapat ~{teamsPerPerson}
-            {remainder > 0 ? `–${teamsPerPerson + 1}` : ""} tim
+            Setiap peserta dapat {targetPerPerson} tim
+            {recycled > 0 && ` (${recycled} tim akan dipilih ulang)`}
           </p>
         )}
       </section>

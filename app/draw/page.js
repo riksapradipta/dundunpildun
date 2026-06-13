@@ -137,14 +137,9 @@ export default function DrawPage() {
     }
 
     const batch = batches[currentBatch];
-    const pickedSoFar = batches
-      .slice(0, completedBatches)
-      .flatMap((b) => b.teams);
-    const unassigned = session.teams.filter(
-      (s) => !pickedSoFar.includes(s)
-    );
+    const pool = session.teams;
 
-    startSpin(batch, unassigned, () => {
+    startSpin(batch, pool, () => {
       setCompletedBatches((prev) => prev + 1);
       setCurrentBatch((prev) => prev + 1);
     });
@@ -198,8 +193,12 @@ export default function DrawPage() {
     });
   }
 
-  const totalTeams = session.teams.length;
-  const pickedSoFarCount = Object.keys(teamToColor).length;
+  const totalTeams = batches.length > 0
+    ? batches.reduce((s, b) => s + b.teams.length, 0)
+    : Math.max(4, Math.ceil(session.teams.length / (4 * session.friends.length)) * 4) * session.friends.length;
+  const pickedSoFarCount = batches
+    .slice(0, completedBatches)
+    .reduce((s, b) => s + b.teams.length, 0);
 
   const friendStats = {};
   session.friends.forEach((f) => {
