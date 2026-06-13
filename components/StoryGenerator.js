@@ -165,7 +165,24 @@ export default function StoryGenerator({ friend, color, teams }) {
           if (imgCache[slug]) {
             const img = imgCache[slug];
             const s = flagSize;
-            ctx.drawImage(img, cx + cardW / 2 - s / 2, currentY + flagY - s / 2, s, s);
+            const ix = cx + cardW / 2 - s / 2;
+            const iy = currentY + flagY - s / 2;
+            const r = s * 0.18;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(ix + r, iy);
+            ctx.lineTo(ix + s - r, iy);
+            ctx.quadraticCurveTo(ix + s, iy, ix + s, iy + r);
+            ctx.lineTo(ix + s, iy + s - r);
+            ctx.quadraticCurveTo(ix + s, iy + s, ix + s - r, iy + s);
+            ctx.lineTo(ix + r, iy + s);
+            ctx.quadraticCurveTo(ix, iy + s, ix, iy + s - r);
+            ctx.lineTo(ix, iy + r);
+            ctx.quadraticCurveTo(ix, iy, ix + r, iy);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(img, ix, iy, s, s);
+            ctx.restore();
           } else {
             ctx.font = `${flagSize}px ${font}`;
             ctx.textAlign = "center";

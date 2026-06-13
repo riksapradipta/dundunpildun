@@ -29,7 +29,7 @@ function FriendResultCard({ friend, color, teams }) {
           const team = TEAM_MAP[slug];
           return (
             <div key={slug} className="flex flex-col items-center rounded-lg border border-gray-100 bg-white px-0.5 py-1.5 text-center">
-              {team?.flagImg ? <img src={team.flagImg} className="inline-block w-7 h-7 sm:w-8 sm:h-8 align-middle" /> : <span className="text-2xl sm:text-3xl leading-none">{team?.flag}</span>}
+              {team?.flagImg ? <img src={team.flagImg} className="inline-block w-7 h-7 sm:w-8 sm:h-8 align-middle rounded" /> : <span className="text-2xl sm:text-3xl leading-none">{team?.flag}</span>}
               <span className="text-[8px] sm:text-[10px] font-medium mt-0.5">{team?.name}</span>
               <span className="text-[7px] sm:text-[9px] text-gray-400">{team?.group}</span>
             </div>
@@ -47,7 +47,7 @@ function PersonalView({ friend, color, teams }) {
         {Array.from({ length: 8 }).map((_, i) => (
           <Marquee key={i} repeat={8} reverse={i % 2 === 0} className="[--duration:60s]" applyMask>
             {WC2026_TEAMS.map((team) => (
-              <span key={team.slug} className="text-4xl sm:text-5xl leading-none">{team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle" /> : team.flag}</span>
+              <span key={team.slug} className="text-4xl sm:text-5xl leading-none">{team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle rounded" /> : team.flag}</span>
             ))}
           </Marquee>
         ))}
@@ -65,7 +65,7 @@ function PersonalView({ friend, color, teams }) {
           const team = TEAM_MAP[slug];
           return (
             <div key={slug} className={`flex flex-col items-center rounded-2xl border-2 ${color.border} ${color.bg} p-3 sm:p-4 text-center shadow-sm`}>
-              {team?.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-9 sm:h-9 align-middle" /> : <span className="text-3xl sm:text-4xl leading-none">{team?.flag}</span>}
+              {team?.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-9 sm:h-9 align-middle rounded" /> : <span className="text-3xl sm:text-4xl leading-none">{team?.flag}</span>}
               <span className="text-xs sm:text-sm font-bold mt-1.5">{team?.name}</span>
               <span className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Grup {team?.group}</span>
             </div>
@@ -140,7 +140,7 @@ function ResultsPage() {
         {Array.from({ length: 8 }).map((_, i) => (
           <Marquee key={i} repeat={8} reverse={i % 2 === 0} className="[--duration:60s]" applyMask>
             {WC2026_TEAMS.map((team) => (
-              <span key={team.slug} className="text-4xl sm:text-5xl leading-none">{team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle" /> : team.flag}</span>
+              <span key={team.slug} className="text-4xl sm:text-5xl leading-none">{team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle rounded" /> : team.flag}</span>
             ))}
           </Marquee>
         ))}

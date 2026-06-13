@@ -16,7 +16,7 @@ export default function Home() {
                 key={team.slug}
                 className="text-4xl sm:text-5xl leading-none"
               >
-                {team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle" /> : team.flag}
+                {team.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-10 sm:h-10 align-middle rounded" /> : team.flag}
               </span>
             ))}
           </Marquee>

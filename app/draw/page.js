@@ -391,7 +391,7 @@ export default function DrawPage() {
                     className={`flex items-center gap-2 px-3 py-2 transition-all ${rowBg}`}
                   >
                     <span className="text-[11px] text-gray-400 font-medium w-5 shrink-0">{rank}</span>
-                    {team.flagImg ? <img src={team.flagImg} className="inline-block w-5 h-5 sm:w-6 sm:h-6 align-middle" /> : <span className="text-base sm:text-lg leading-none">{team.flag}</span>}
+                    {team.flagImg ? <img src={team.flagImg} className="inline-block w-5 h-5 sm:w-6 sm:h-6 align-middle rounded" /> : <span className="text-base sm:text-lg leading-none">{team.flag}</span>}
                     <span className="text-xs sm:text-sm font-medium truncate">{team.name}</span>
                     {isPicked && (
                       <span className={`ml-auto h-2 w-2 rounded-full ${pickColor.dot} ring-1 ring-white shrink-0`} />

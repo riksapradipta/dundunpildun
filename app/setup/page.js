@@ -145,7 +145,7 @@ export default function SetupPage() {
                   : "border-gray-200 bg-white text-gray-400 hover:border-gray-300"
                   }`}
               >
-                {team.flagImg ? <img src={team.flagImg} className="inline-block w-6 h-6 sm:w-7 sm:h-7 align-middle" /> : <span className="text-xl sm:text-2xl leading-none">{team.flag}</span>}
+                {team.flagImg ? <img src={team.flagImg} className="inline-block w-6 h-6 sm:w-7 sm:h-7 align-middle rounded" /> : <span className="text-xl sm:text-2xl leading-none">{team.flag}</span>}
                 <span className="truncate font-medium leading-tight">{team.name}</span>
               </button>
             );
