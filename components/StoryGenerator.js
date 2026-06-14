@@ -3,6 +3,7 @@
 import { useState } from "react";
 import QRCode from "qrcode";
 import { WC2026_TEAMS } from "@/lib/teams";
+import { useLocale } from "@/lib/locale-context";
 
 const TEAM_MAP = Object.fromEntries(WC2026_TEAMS.map((t) => [t.slug, t]));
 
@@ -28,6 +29,7 @@ function hexToRgba(hex, alpha) {
 }
 
 export default function StoryGenerator({ friend, color, teams }) {
+  const { t } = useLocale();
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
@@ -122,7 +124,7 @@ export default function StoryGenerator({ friend, color, teams }) {
       // Subtitle
       ctx.fillStyle = "#94a3b8";
       ctx.font = `26px ${font}`;
-      ctx.fillText("mendukung sepenuh hati", nameX, 205);
+      ctx.fillText(t("story.support"), nameX, 205);
 
       // Teams grid — no box, big flags
       const teamsPerRow = 3;
@@ -225,11 +227,10 @@ export default function StoryGenerator({ friend, color, teams }) {
       ctx.shadowColor = hexToRgba("#ffb14a", 0.35);
       ctx.shadowBlur = 8;
       ctx.strokeText("Scan", textX, textCenterY - 30);
-      ctx.strokeText("untuk bikin juga", textX, textCenterY + 30);
-      // fill on top
+      ctx.strokeText(t("story.scan_subtitle"), textX, textCenterY + 30);
       ctx.shadowBlur = 0;
-      ctx.fillText("Scan", textX, textCenterY - 30);
-      ctx.fillText("untuk bikin juga", textX, textCenterY + 30);
+      ctx.fillText(t("story.scan"), textX, textCenterY - 30);
+      ctx.fillText(t("story.scan_subtitle"), textX, textCenterY + 30);
 
       // Branding
       ctx.fillStyle = "#475569";
@@ -257,7 +258,7 @@ export default function StoryGenerator({ friend, color, teams }) {
       disabled={loading}
       className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-orange-700 transition hover:bg-orange-100 hover:border-orange-300 active:scale-95 disabled:opacity-50 touch-manipulation"
     >
-      {loading ? "Membuat..." : "Bagikan"}
+      {loading ? t("story.generating") : t("story.share")}
     </button>
   );
 }

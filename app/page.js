@@ -4,8 +4,11 @@ import Link from "next/link";
 import Marquee from "@/components/animata/container/marquee";
 import KineticTopBuild from "@/components/animata/text/kinetic-top-build";
 import { WC2026_TEAMS } from "@/lib/teams";
+import { useLocale } from "@/lib/locale-context";
 
 export default function Home() {
+  const { t } = useLocale();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 relative overflow-hidden">
       <div className="absolute inset-0 -z-10 opacity-15 flex flex-col justify-between">
@@ -31,13 +34,13 @@ export default function Home() {
           />
         </h1>
         <p className="text-sm sm:text-lg text-gray-500 leading-relaxed px-3 py-1.5 rounded-lg backdrop-blur-sm bg-white/40">
-          spirit menggembira piala dunia, menggelora kakinya ada dua, tangannya ada dua, sportifitasmu kau jaga brader
+          {t("home.subtitle")}
         </p>
         <Link
           href="/setup"
           className="inline-flex items-center gap-2 rounded-2xl bg-green-600 px-8 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition-all hover:bg-green-700 active:scale-95 touch-manipulation"
         >
-          Buat Drawing Pildun 2026 🌍
+          {t("home.cta")}
         </Link>
       </div>
     </main>

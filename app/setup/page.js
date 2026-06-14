@@ -4,8 +4,10 @@ import { useState } from "react";
 import { WC2026_TEAMS } from "@/lib/teams";
 import { encodeSession } from "@/lib/draw";
 import { getColor } from "@/lib/colors";
+import { useLocale } from "@/lib/locale-context";
 
 export default function SetupPage() {
+  const { t } = useLocale();
   const [friends, setFriends] = useState([]);
   const [input, setInput] = useState("");
   const DEFAULT_EXCLUDED = new Set(["perguruan-toho", "nankatsu-fc"]);
@@ -68,16 +70,16 @@ export default function SetupPage() {
   return (
     <main className="mx-auto max-w-3xl px-3 sm:px-4 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold">Buat Drawing Pildun 2026 🌍</h1>
-        <p className="mt-1 text-sm sm:text-base text-gray-500">Atur peserta dan tim yang akan diundi pun dirinya itu. Jumlah tim yang dipegang akan dibagi secara merata.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold">{t("setup.title")}</h1>
+        <p className="mt-1 text-sm sm:text-base text-gray-500">{t("setup.description")}</p>
       </div>
 
       <section className="mb-10">
-        <h2 className="mb-3 text-lg font-semibold">Peserta ({friends.length})</h2>
+        <h2 className="mb-3 text-lg font-semibold">{t("setup.participants", { count: friends.length })}</h2>
         <div className="flex gap-2 mb-3">
           <input
             className="flex-1 rounded-xl border border-gray-300 px-4 py-3 sm:py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
-            placeholder="Nama teman, pisah dengan koma (contoh: roy, joni, budi)"
+            placeholder={t("setup.name_placeholder")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && addFriend()}
@@ -87,7 +89,7 @@ export default function SetupPage() {
             disabled={!input.trim()}
             className="rounded-xl bg-green-600 px-5 py-3 sm:py-2.5 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-40 touch-manipulation"
           >
-            Tambah
+            {t("setup.add_button")}
           </button>
         </div>
         {friends.length > 0 && (
@@ -114,8 +116,8 @@ export default function SetupPage() {
         )}
         {friends.length >= 2 && (
           <p className="mt-2 text-xs text-gray-400">
-            Setiap peserta dapat {targetPerPerson} tim
-            {recycled > 0 && ` (${recycled} tim akan dipilih ulang)`}
+            {t("setup.each_gets", { count: targetPerPerson })}
+            {recycled > 0 && t("setup.recycled_info", { count: recycled })}
           </p>
         )}
       </section>
@@ -123,14 +125,14 @@ export default function SetupPage() {
       <section className="mb-8 sm:mb-10">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base sm:text-lg font-semibold">
-            Tim ({selectedTeams.size}/{WC2026_TEAMS.length})
+            {t("setup.teams", { selected: selectedTeams.size, total: WC2026_TEAMS.length })}
           </h2>
           <div className="flex gap-2 text-xs sm:text-sm">
             <button onClick={selectAll} className="text-green-600 hover:underline touch-manipulation">
-              Pilih Semua
+              {t("setup.select_all")}
             </button>
             <button onClick={deselectAll} className="text-gray-400 hover:underline touch-manipulation">
-              Hapus Semua
+              {t("setup.deselect_all")}
             </button>
           </div>
         </div>
@@ -161,12 +163,12 @@ export default function SetupPage() {
         className="w-full rounded-2xl bg-green-600 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition hover:bg-green-700 disabled:opacity-40 disabled:shadow-none touch-manipulation"
       >
         {friends.length < 2
-          ? "Tambah minimal 2 peserta"
+          ? t("setup.min_participants")
           : selectedTeams.size < 2
-            ? "Pilih minimal 2 tim"
+            ? t("setup.min_teams")
             : selectedTeams.size < friends.length
-              ? `Jumlah tim (${selectedTeams.size}) harus ≥ jumlah peserta (${friends.length})`
-              : "Mulai Undian ⚽"}
+              ? t("setup.not_enough_teams", { selected: selectedTeams.size, friends: friends.length })
+              : t("setup.start_draw")}
       </button>
     </main>
   );

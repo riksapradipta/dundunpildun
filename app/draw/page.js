@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { WC2026_TEAMS } from "@/lib/teams";
 import { decodeSession, encodeSession, runDraw } from "@/lib/draw";
 import { getColorByFriend } from "@/lib/colors";
+import { useLocale } from "@/lib/locale-context";
 
 const TEAM_MAP = Object.fromEntries(WC2026_TEAMS.map((t) => [t.slug, t]));
 
@@ -41,6 +42,7 @@ function Confetti({ color }) {
 }
 
 export default function DrawPage() {
+  const { t } = useLocale();
   const router = useRouter();
   const [session, setSession] = useState(null);
   const [batches, setBatches] = useState([]);
@@ -218,7 +220,7 @@ export default function DrawPage() {
       {celebrate && <Confetti color={currentColor?.dot} />}
 
       <div className="flex items-center justify-between mb-3 sm:mb-6">
-        <h1 className="text-base sm:text-xl font-bold">Undian Piala Dunia 2026</h1>
+        <h1 className="text-base sm:text-xl font-bold">{t("draw.title")}</h1>
         <span className="text-xs sm:text-sm text-gray-500">
           {pickedSoFarCount}/{totalTeams}
         </span>
@@ -259,22 +261,22 @@ export default function DrawPage() {
           {spinning ? (
             <span className="text-sm sm:text-lg font-semibold text-gray-500">
               {stoppedCount > 0
-                ? `Tim ke-${stoppedCount} terpilih...`
-                : "Mengundi..."}
+                ? t("draw.team_selected", { count: stoppedCount })
+                : t("draw.selecting")}
             </span>
           ) : celebrate ? (
             <span
               className={`text-sm sm:text-lg font-semibold animate-pop-in ${currentColor?.text || "text-green-600"}`}
             >
-              {currentFriend} mendapat {rouletteTeamCount} tim! 🎉
+              {t("draw.friend_got_teams", { friend: currentFriend, count: rouletteTeamCount })}
             </span>
           ) : done ? (
             <span className="text-sm sm:text-lg font-semibold text-green-600">
-              Undian selesai! 🎉
+              {t("draw.draw_complete")}
             </span>
           ) : (
             <span className="text-sm sm:text-lg font-semibold text-gray-500">
-              {started ? "Siap..." : "Klik Mulai untuk mengundi"}
+              {started ? t("draw.ready") : t("draw.click_to_start")}
             </span>
           )}
         </div>
@@ -345,14 +347,14 @@ export default function DrawPage() {
             onClick={handleStart}
             className="flex-1 rounded-2xl bg-green-600 py-4 text-base sm:text-lg font-semibold text-white shadow-lg shadow-green-200 transition hover:bg-green-700 active:scale-95 touch-manipulation"
           >
-            Mulai Undian ⚽
+            {t("draw.start_button")}
           </button>
         </div>
       )}
 
       {started && !done && (
         <p className="text-center text-xs sm:text-sm text-gray-400 mb-2">
-          Giliran: <span className="font-semibold">{currentFriend}</span>
+          {t("draw.turn", { friend: currentFriend })}
         </p>
       )}
 
@@ -367,7 +369,7 @@ export default function DrawPage() {
         ).map(([group, teams]) => (
           <div key={group} className="border border-gray-200 rounded-lg overflow-hidden">
             <div className="bg-gray-50 border-b border-gray-200 px-3 py-2">
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Grup {group}</h3>
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">{t("draw.group", { group })}</h3>
             </div>
             <div className="divide-y divide-gray-100">
               {teams.map((team, idx) => {

@@ -8,10 +8,12 @@ import { getColorByFriend } from "@/lib/colors";
 import Marquee from "@/components/animata/container/marquee";
 import StoryGenerator from "@/components/StoryGenerator";
 import Link from "next/link";
+import { useLocale } from "@/lib/locale-context";
 
 const TEAM_MAP = Object.fromEntries(WC2026_TEAMS.map((t) => [t.slug, t]));
 
 function FriendResultCard({ friend, color, teams }) {
+  const { t } = useLocale();
   return (
     <div className={`rounded-2xl border ${color.border} ${color.bg} p-4 sm:p-5 shadow-sm animate-slide-up`}>
       <div className="flex items-center gap-3 mb-3 sm:mb-4">
@@ -20,7 +22,7 @@ function FriendResultCard({ friend, color, teams }) {
         </div>
         <div className="flex-1 min-w-0">
           <h2 className="font-bold text-base sm:text-lg truncate">{friend}</h2>
-          <p className={`text-xs sm:text-sm ${color.text}`}>{teams.length} tim</p>
+          <p className={`text-xs sm:text-sm ${color.text}`}>{t("results.teams_count", { count: teams.length })}</p>
         </div>
         <StoryGenerator friend={friend} color={color} teams={teams} />
       </div>
@@ -41,6 +43,7 @@ function FriendResultCard({ friend, color, teams }) {
 }
 
 function PersonalView({ friend, color, teams }) {
+  const { t } = useLocale();
   return (
     <main className="mx-auto max-w-2xl px-4 py-8 sm:py-12 relative overflow-hidden">
       <div className="absolute inset-0 -z-10 opacity-10 flex flex-col justify-between pointer-events-none">
@@ -57,7 +60,7 @@ function PersonalView({ friend, color, teams }) {
           {friend.charAt(0).toUpperCase()}
         </div>
         <h1 className="text-2xl sm:text-3xl font-bold mb-1">{friend}</h1>
-        <p className={`text-sm sm:text-base ${color.text}`}>{teams.length} tim</p>
+        <p className={`text-sm sm:text-base ${color.text}`}>{t("results.teams_count", { count: teams.length })}</p>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 mb-8">
@@ -67,7 +70,7 @@ function PersonalView({ friend, color, teams }) {
             <div key={slug} className={`flex flex-col items-center rounded-2xl border-2 ${color.border} ${color.bg} p-3 sm:p-4 text-center shadow-sm`}>
               {team?.flagImg ? <img src={team.flagImg} className="inline-block w-8 h-8 sm:w-9 sm:h-9 align-middle rounded" /> : <span className="text-3xl sm:text-4xl leading-none">{team?.flag}</span>}
               <span className="text-xs sm:text-sm font-bold mt-1.5">{team?.name}</span>
-              <span className="text-[10px] sm:text-xs text-gray-500 mt-0.5">Grup {team?.group}</span>
+              <span className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{t("draw.group", { group: team?.group })}</span>
             </div>
           );
         })}
@@ -77,6 +80,7 @@ function PersonalView({ friend, color, teams }) {
 }
 
 function ResultsPage() {
+  const { t } = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [session, setSession] = useState(null);
@@ -127,7 +131,7 @@ function ResultsPage() {
             href={window.location.pathname + window.location.hash}
             className="text-sm text-gray-400 hover:text-gray-600 underline touch-manipulation py-2"
           >
-            Lihat semua hasil
+            {t("results.view_all")}
           </Link>
         </div>
       </div>
@@ -147,9 +151,9 @@ function ResultsPage() {
       </div>
       <div className="text-center mb-6 sm:mb-10">
         <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">🏆</div>
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Hasil Undian!</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">{t("results.title")}</h1>
         <p className="text-sm sm:text-base text-gray-500">
-          {session.friends.length} peserta — {session.teams.length} tim
+          {t("results.participants_info", { friends: session.friends.length, teams: session.teams.length })}
         </p>
       </div>
 
@@ -168,10 +172,10 @@ function ResultsPage() {
           onClick={handleCopyAll}
           className="inline-flex items-center gap-2 rounded-2xl bg-gray-800 px-8 py-3.5 text-sm sm:text-base font-semibold text-white transition hover:bg-gray-900 active:scale-95 touch-manipulation"
         >
-          {copied ? "✓ Link Tersalin!" : "Salin Link Undian"}
+          {copied ? t("results.link_copied") : t("results.copy_link")}
         </button>
         <Link href="/setup" className="text-sm text-green-600 hover:underline touch-manipulation py-2">
-          Buat Undian Pildun 2026 🌍
+          {t("results.create_new")}
         </Link>
       </div>
     </main>
